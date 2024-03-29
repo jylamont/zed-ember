@@ -1,0 +1,11 @@
+id = "ember"
+name = "Ember"
+version = "0.0.1"
+schema_version = 1
+authors = []
+description = "Syntax Highlighting for Ember"
+repository = "https://github.com/jylamont/zed-ember"
+
+[grammars.glimmer]
+repository = "https://github.com/ember-tooling/tree-sitter-glimmer"
+commit = "6b25d265c990139353e1f7f97baf84987ebb7bf0"
