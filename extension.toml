@@ -2,7 +2,7 @@ id = "ember"
 name = "Ember"
 version = "0.0.1"
 schema_version = 1
-authors = []
+authors = ["James Lamont <james@getvero.com>"]
 description = "Syntax Highlighting for Ember"
 repository = "https://github.com/jylamont/zed-ember"
 
