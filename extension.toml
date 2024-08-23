@@ -1,11 +1,22 @@
 id = "ember"
 name = "Ember"
-version = "0.0.1"
+version = "0.0.2"
 schema_version = 1
-authors = ["James Lamont <james@getvero.com>"]
+authors = ["James Lamont <james@getvero.com>", "Lou Greenwood"]
 description = "Syntax Highlighting for Ember"
 repository = "https://github.com/jylamont/zed-ember"
 
 [grammars.glimmer]
 repository = "https://github.com/ember-tooling/tree-sitter-glimmer"
 commit = "6b25d265c990139353e1f7f97baf84987ebb7bf0"
+
+[language_servers.ember]
+name = "Ember Language Server"
+languages = [
+    "Handlebars",
+    "Glimmer",
+    "JavaScript",
+    "TypeScript",
+    "glimmer-js",
+    "glimmer-ts",
+]

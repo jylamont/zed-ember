@@ -1,0 +1,13 @@
+[package]
+name = "ember"
+version = "0.0.2"
+edition = "2021"
+publish = false
+license = "MIT"
+authors = ["jylamont", "lougreenwood"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+zed_extension_api = "0.0.6"
