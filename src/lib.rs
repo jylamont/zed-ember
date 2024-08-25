@@ -21,9 +21,11 @@ impl EmberExtension {
     fn server_script_path(&mut self, id: &zed::LanguageServerId) -> Result<String> {
         let node_dependencies: HashMap<&str, &str> = [
             ("@ember-tooling/ember-language-server", "2.30.3"),
-            ("els-addon-file-watcher", "0.0.2"),
-            ("els-addon-glint", "0.6.4"),
+            // TODO: ONLY INCLUDE THE GLINT ADDON IF WE CAN DETECT THAT THE PROJECT IS A GLINT ONE
+            // ... OR SOMETHING LIKE THAT
+            // ("els-addon-glint", "0.6.4"),
             ("els-a11y-addon", "1.0.4"),
+            // TODO: FIGURE OUT HOW TO REGISTER COMMANDS FOR EMBER FAST CLI
             ("ember-fast-cli", "1.3.1"),
         ]
         .iter()
