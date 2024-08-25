@@ -27,6 +27,7 @@ impl EmberExtension {
             ("els-a11y-addon", "1.0.4"),
             // TODO: FIGURE OUT HOW TO REGISTER COMMANDS FOR EMBER FAST CLI
             ("ember-fast-cli", "1.3.1"),
+            ("ember-cli", "*"),
         ]
         .iter()
         .cloned()
@@ -101,6 +102,8 @@ impl zed::Extension for EmberExtension {
         language_server_id: &zed_extension_api::LanguageServerId,
         worktree: &zed_extension_api::Worktree,
     ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
+        // TODO: SET DEFAULT ADDONS & ALLOW OVERRIDE BY USER
+        // TODO: ADDON SHOULD BE SPECIFIABLE BY NAME, NOT PATH. WE CAN PRFIX THE PATH HERE INSTEAD.
         let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
             .ok()
             .and_then(|lsp_settings| lsp_settings.initialization_options.clone())
@@ -113,6 +116,7 @@ impl zed::Extension for EmberExtension {
         language_server_id: &zed_extension_api::LanguageServerId,
         worktree: &zed_extension_api::Worktree,
     ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
+        // TODO: ADDON SHOULD BE SPECIFIABLE BY NAME, NOT PATH. WE CAN PRFIX THE PATH HERE INSTEAD.
         let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
             .ok()
             .and_then(|lsp_settings| lsp_settings.settings.clone())
