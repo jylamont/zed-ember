@@ -25,7 +25,6 @@ impl EmberExtension {
             ("els-addon-glint", "0.6.4"),
             ("els-a11y-addon", "1.0.4"),
             ("ember-fast-cli", "1.3.1"),
-            ("els-intl-addon", "1.0.3"),
         ]
         .iter()
         .cloned()
