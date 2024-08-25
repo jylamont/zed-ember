@@ -1,8 +1,10 @@
 use std::collections::HashMap;
-// use std::path::PathBuf;
 use std::{env, fs};
 use zed::settings::LspSettings;
-use zed_extension_api::{self as zed, serde_json, Result};
+use zed_extension_api::{self as zed, Result};
+
+use zed::lsp::{Completion, CompletionKind};
+use zed::CodeLabelSpan;
 
 struct EmberExtension {
     did_find_server: bool,
@@ -93,99 +95,65 @@ impl zed::Extension for EmberExtension {
         })
     }
 
+    fn language_server_initialization_options(
+        &mut self,
+        language_server_id: &zed_extension_api::LanguageServerId,
+        worktree: &zed_extension_api::Worktree,
+    ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
+        let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
+            .ok()
+            .and_then(|lsp_settings| lsp_settings.initialization_options.clone())
+            .unwrap_or_default();
+        Ok(Some(settings))
+    }
+
     fn language_server_workspace_configuration(
         &mut self,
-        _language_server_id: &zed::LanguageServerId,
-        worktree: &zed::Worktree,
-    ) -> Result<Option<serde_json::Value>> {
-        let settings = LspSettings::for_worktree("ember-language-server", worktree)
+        language_server_id: &zed_extension_api::LanguageServerId,
+        worktree: &zed_extension_api::Worktree,
+    ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
+        let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
             .ok()
             .and_then(|lsp_settings| lsp_settings.settings.clone())
             .unwrap_or_default();
-
-        Ok(Some(serde_json::json!({
-            "els": settings
-        })))
+        Ok(Some(settings))
     }
 
-    // fn language_server_initialization_options(
-    //     &mut self,
-    //     _language_server_id: &zed::LanguageServerId,
-    //     _worktree: &zed::Worktree,
-    // ) -> Result<Option<serde_json::Value>> {
-    //     Ok(Some(serde_json::json!({
-    //         "els.codeLens.relatedFiles": true,
-    //         "els.local.useBuiltinLinting": true,
-    //         "els.local.addons": ["/Users/Lou/Library/Application Support/Zed/extensions/work/ember/node_modules/els-addon-file-watcher", "/Users/Lou/Library/Application Support/Zed/extensions/work/ember/node_modules/els-addon-glint", "/Users/Lou/Library/Application Support/Zed/extensions/work/ember/node_modules/els-a11y-addon", "/Users/Lou/Library/Application Support/Zed/extensions/work/ember/node_modules/ember-fast-cli", "/Users/Lou/Library/Application Support/Zed/extensions/work/ember/node_modules/els-intl-addon"]
-    //     })))
-    // }
+    fn label_for_completion(
+        &self,
+        _language_server_id: &zed::LanguageServerId,
+        completion: Completion,
+    ) -> Option<zed::CodeLabel> {
+        println!("Label for completion {:?}", completion.kind);
+        let highlight_name = match completion.kind? {
+            CompletionKind::Class | CompletionKind::Interface => "type",
+            CompletionKind::Constructor => "type",
+            CompletionKind::Constant => "constant",
+            CompletionKind::Function | CompletionKind::Method => "function",
+            CompletionKind::Property | CompletionKind::Field => "property",
+            CompletionKind::Variable => "variable",
+            CompletionKind::Keyword => "keyword",
+            CompletionKind::Value => "value",
+            _ => return None,
+        };
 
-    // - `els.server.debug.port` - LS debug port
-    // - `els.server.debug.enabled` - disable / enable LS debug
-    // - `els.codeLens.relatedFiles` - disable / enable related files
-    // - `els.local.useBuiltinLinting` - disable / enable ember-template-lint integration
-    // - `els.local.useBuiltinFoldingRangeProvider` - disable / enable folding range provider (hbs)
-    // - `els.local.addons`
+        let len = completion.label.len();
+        let name_span = CodeLabelSpan::literal(completion.label, Some(highlight_name.to_string()));
 
-    // fn language_server_initialization_options(
-    //     &mut self,
-    //     _: &zed::LanguageServerId,
-    //     _: &zed::Worktree,
-    // ) -> Result<Option<serde_json::Value>> {
-    //     // let current_dir = env::current_dir().unwrap_or(PathBuf::new());
-    //     // let node_modules_path = current_dir.join("node_modules");
-    //     // let ts_lib_path = node_modules_path
-    //     //     .join("typescript/lib")
-    //     //     .to_string_lossy()
-    //     //     .to_string();
-    //     // let ng_service_path = node_modules_path
-    //     //     .join("@ember-tooling/ember-language-server/bin")
-    //     //     .to_string_lossy()
-    //     //     .to_string();
-    //     Ok(Some(serde_json::json!({
-    //         // "typescript": {
-    //         //     "tsdk": ts_lib_path,
-    //         // },
-    //         // "tsProbeLocations": ts_lib_path,
-    //         // "ngProbeLocations": ng_service_path,
-    //     })))
-    // }
-
-    // fn label_for_completion(
-    //     &self,
-    //     _language_server_id: &zed::LanguageServerId,
-    //     completion: Completion,
-    // ) -> Option<zed::CodeLabel> {
-    //     println!("Label for completion {:?}", completion.kind);
-    //     let highlight_name = match completion.kind? {
-    //         CompletionKind::Class | CompletionKind::Interface => "type",
-    //         CompletionKind::Constructor => "type",
-    //         CompletionKind::Constant => "constant",
-    //         CompletionKind::Function | CompletionKind::Method => "function",
-    //         CompletionKind::Property | CompletionKind::Field => "property",
-    //         CompletionKind::Variable => "variable",
-    //         CompletionKind::Keyword => "keyword",
-    //         CompletionKind::Value => "value",
-    //         _ => return None,
-    //     };
-
-    //     let len = completion.label.len();
-    //     let name_span = CodeLabelSpan::literal(completion.label, Some(highlight_name.to_string()));
-
-    //     Some(zed::CodeLabel {
-    //         code: Default::default(),
-    //         spans: if let Some(detail) = completion.detail {
-    //             vec![
-    //                 name_span,
-    //                 CodeLabelSpan::literal(" ", None),
-    //                 CodeLabelSpan::literal(detail, None),
-    //             ]
-    //         } else {
-    //             vec![name_span]
-    //         },
-    //         filter_range: (0..len).into(),
-    //     })
-    // }
+        Some(zed::CodeLabel {
+            code: Default::default(),
+            spans: if let Some(detail) = completion.detail {
+                vec![
+                    name_span,
+                    CodeLabelSpan::literal(" ", None),
+                    CodeLabelSpan::literal(detail, None),
+                ]
+            } else {
+                vec![name_span]
+            },
+            filter_range: (0..len).into(),
+        })
+    }
 }
 
 zed::register_extension!(EmberExtension);
