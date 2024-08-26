@@ -8,15 +8,8 @@ repository = "https://github.com/jylamont/zed-ember"
 
 [grammars.glimmer]
 repository = "https://github.com/ember-tooling/tree-sitter-glimmer"
-commit = "6b25d265c990139353e1f7f97baf84987ebb7bf0"
+commit = "da605af8c5999b43e6839b575eae5e6cafabb06f"
 
 [language_servers.ember]
 name = "Ember Language Server"
-languages = [
-    "Handlebars",
-    "Glimmer",
-    "JavaScript",
-    "TypeScript",
-    "glimmer-js",
-    "glimmer-ts",
-]
+languages = ["Handlebars", "Glimmer", "JavaScript", "TypeScript"]
