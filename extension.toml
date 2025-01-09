@@ -5,6 +5,7 @@ schema_version = 1
 authors = ["James Lamont <james@getvero.com>"]
 description = "Syntax Highlighting for Ember"
 repository = "https://github.com/jylamont/zed-ember"
+block_comment = ["{{!-- ", " --}}"]
 
 [grammars.glimmer]
 repository = "https://github.com/ember-tooling/tree-sitter-glimmer"
