@@ -1,6 +1,6 @@
-name = "Handlebars"
-grammar = "glimmer"
-path_suffixes = ["hbs"]
+name = "TypeScript.Glimmer"
+grammar = "glimmer_typescript"
+path_suffixes = ["gts"]
 block_comment = ["{{!-- ", " --}}"]
 word_characters = []
 scope_opt_in_language_servers = [

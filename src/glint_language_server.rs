@@ -6,32 +6,20 @@ use zed_extension_api::{self as zed, Result};
 use zed::lsp::{Completion, CompletionKind};
 use zed::CodeLabelSpan;
 
-struct EmberExtension {
+struct GlintExtension {
     did_find_server: bool,
 }
 
-const SERVER_PATH: &str =
-    "node_modules/@ember-tooling/ember-language-server/bin/ember-language-server.js";
+const SERVER_PATH: &str = "node_modules/@glint/core/bin/glint-language-server.js";
 
-impl EmberExtension {
+impl GlintExtension {
     fn server_exists(&self) -> bool {
         fs::metadata(SERVER_PATH).map_or(false, |stat| stat.is_file())
     }
 
     fn server_script_path(&mut self, id: &zed::LanguageServerId) -> Result<String> {
-        let node_dependencies: HashMap<&str, &str> = [
-            ("@ember-tooling/ember-language-server", "2.30.5"),
-            // TODO: ONLY INCLUDE THE GLINT ADDON IF WE CAN DETECT THAT THE PROJECT IS A GLINT ONE
-            // ... OR SOMETHING LIKE THAT
-            ("els-addon-glint", "0.6.4"),
-            ("els-a11y-addon", "1.0.4"),
-            // TODO: FIGURE OUT HOW TO REGISTER COMMANDS FOR EMBER FAST CLI
-            ("ember-fast-cli", "1.3.1"),
-            ("ember-cli", "*"),
-        ]
-        .iter()
-        .cloned()
-        .collect();
+        let node_dependencies: HashMap<&str, &str> =
+            [("@glint/core", "1.5.1")].iter().cloned().collect();
 
         let server_exists = self.server_exists();
 
@@ -69,7 +57,7 @@ impl EmberExtension {
     }
 }
 
-impl zed::Extension for EmberExtension {
+impl zed::Extension for GlintExtension {
     fn new() -> Self {
         println!("NEW!");
         Self {
@@ -102,8 +90,6 @@ impl zed::Extension for EmberExtension {
         language_server_id: &zed_extension_api::LanguageServerId,
         worktree: &zed_extension_api::Worktree,
     ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
-        // TODO: SET DEFAULT ADDONS & ALLOW OVERRIDE BY USER
-        // TODO: ADDON SHOULD BE SPECIFIABLE BY NAME, NOT PATH. WE CAN PRFIX THE PATH HERE INSTEAD.
         let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
             .ok()
             .and_then(|lsp_settings| lsp_settings.initialization_options.clone())
@@ -116,7 +102,6 @@ impl zed::Extension for EmberExtension {
         language_server_id: &zed_extension_api::LanguageServerId,
         worktree: &zed_extension_api::Worktree,
     ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
-        // TODO: ADDON SHOULD BE SPECIFIABLE BY NAME, NOT PATH. WE CAN PRFIX THE PATH HERE INSTEAD.
         let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
             .ok()
             .and_then(|lsp_settings| lsp_settings.settings.clone())
@@ -161,4 +146,4 @@ impl zed::Extension for EmberExtension {
     }
 }
 
-zed::register_extension!(EmberExtension);
+zed::register_extension!(GlintExtension);
