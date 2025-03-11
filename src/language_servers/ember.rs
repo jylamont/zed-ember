@@ -1,33 +1,30 @@
 use std::collections::HashMap;
-use std::{env, fs};
-use zed::settings::LspSettings;
+use std::fs;
 use zed_extension_api::{self as zed, Result};
 
 use zed::lsp::{Completion, CompletionKind};
 use zed::CodeLabelSpan;
 
-struct EmberExtension {
-    did_find_server: bool,
+pub struct EmberServer {
+    pub did_find_server: bool,
 }
 
 const SERVER_PATH: &str =
     "node_modules/@ember-tooling/ember-language-server/bin/ember-language-server.js";
 
-impl EmberExtension {
+impl EmberServer {
     fn server_exists(&self) -> bool {
         fs::metadata(SERVER_PATH).map_or(false, |stat| stat.is_file())
     }
 
-    fn server_script_path(&mut self, id: &zed::LanguageServerId) -> Result<String> {
+    pub fn server_script_path(&mut self, id: &zed::LanguageServerId) -> Result<String> {
         let node_dependencies: HashMap<&str, &str> = [
             ("@ember-tooling/ember-language-server", "2.30.5"),
-            // TODO: ONLY INCLUDE THE GLINT ADDON IF WE CAN DETECT THAT THE PROJECT IS A GLINT ONE
-            // ... OR SOMETHING LIKE THAT
-            ("els-addon-glint", "0.6.4"),
             ("els-a11y-addon", "1.0.4"),
             // TODO: FIGURE OUT HOW TO REGISTER COMMANDS FOR EMBER FAST CLI
             ("ember-fast-cli", "1.3.1"),
             ("ember-cli", "*"),
+            // TODO: Revisit adding glint dependencies when the glint language server is implemented.
         ]
         .iter()
         .cloned()
@@ -67,64 +64,8 @@ impl EmberExtension {
         self.did_find_server = true;
         Ok(SERVER_PATH.to_string())
     }
-}
 
-impl zed::Extension for EmberExtension {
-    fn new() -> Self {
-        println!("NEW!");
-        Self {
-            did_find_server: false,
-        }
-    }
-
-    fn language_server_command(
-        &mut self,
-        language_server_id: &zed::LanguageServerId,
-        _worktree: &zed::Worktree,
-    ) -> Result<zed::Command> {
-        let server_path = self.server_script_path(language_server_id)?;
-        Ok(zed::Command {
-            command: zed::node_binary_path()?,
-            args: vec![
-                env::current_dir()
-                    .unwrap()
-                    .join(&server_path)
-                    .to_string_lossy()
-                    .to_string(),
-                "--stdio".to_string(),
-            ],
-            env: Default::default(),
-        })
-    }
-
-    fn language_server_initialization_options(
-        &mut self,
-        language_server_id: &zed_extension_api::LanguageServerId,
-        worktree: &zed_extension_api::Worktree,
-    ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
-        // TODO: SET DEFAULT ADDONS & ALLOW OVERRIDE BY USER
-        // TODO: ADDON SHOULD BE SPECIFIABLE BY NAME, NOT PATH. WE CAN PRFIX THE PATH HERE INSTEAD.
-        let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
-            .ok()
-            .and_then(|lsp_settings| lsp_settings.initialization_options.clone())
-            .unwrap_or_default();
-        Ok(Some(settings))
-    }
-
-    fn language_server_workspace_configuration(
-        &mut self,
-        language_server_id: &zed_extension_api::LanguageServerId,
-        worktree: &zed_extension_api::Worktree,
-    ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
-        // TODO: ADDON SHOULD BE SPECIFIABLE BY NAME, NOT PATH. WE CAN PRFIX THE PATH HERE INSTEAD.
-        let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
-            .ok()
-            .and_then(|lsp_settings| lsp_settings.settings.clone())
-            .unwrap_or_default();
-        Ok(Some(settings))
-    }
-
-    fn label_for_completion(
+    pub fn label_for_completion(
         &self,
         _language_server_id: &zed::LanguageServerId,
         completion: Completion,
@@ -160,5 +101,3 @@ impl zed::Extension for EmberExtension {
         })
     }
 }
-
-zed::register_extension!(EmberExtension);

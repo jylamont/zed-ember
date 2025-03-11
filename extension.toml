@@ -30,22 +30,22 @@ languages = [
     "TypeScript.Glimmer",
 ]
 
-# [language_servers.glint]
-# name = "Glint"
-# language = "Glimmer"
-# languages = [
-#     "Handlebars",
-#     "Glimmer",
-#     "JavaScript.glimmer",
-#     "TypeScript.glimmer",
-# ]
+[language_servers.glint]
+name = "Glint"
+language = "Glimmer"
+languages = [
+    "Handlebars",
+    "Glimmer",
+    "JavaScript.glimmer",
+    "TypeScript.glimmer",
+]
 
-[language_servers.ember.language_ids]
-"HTML" = "html"
-"Handlebars" = "glimmer"
-"Glimmer" = "glimmer"
-"JavaScript.Glimmer" = "glimmer_javascript"
-"TypeScript.Glimmer" = "glimmer_typescript"
+# [language_servers.ember.language_ids]
+# "HTML" = "html"
+# "Handlebars" = "glimmer"
+# "Glimmer" = "glimmer"
+# "JavaScript.Glimmer" = "glimmer_javascript"
+# "TypeScript.Glimmer" = "glimmer_typescript"
 
 # [language_servers.glint.language_ids]
 # "HTML" = "html"
