@@ -20,10 +20,8 @@ commit = "4006128790efb58ca82a4492d8ef0983b260fc6a"
 
 [language_servers.ember]
 name = "Ember Language Server"
-language = "Glimmer"
 languages = [
     "Handlebars",
-    "Glimmer",
     "JavaScript",
     "TypeScript",
     "JavaScript.Glimmer",
@@ -32,43 +30,19 @@ languages = [
 
 [language_servers.glint]
 name = "Glint"
-language = "Glimmer"
 languages = [
-    "Handlebars",
-    "Glimmer",
-    "JavaScript.glimmer",
-    "TypeScript.glimmer",
+    "JavaScript",
+    "TypeScript",
+    "JavaScript.Glimmer",
+    "TypeScript.Glimmer",
 ]
 
-# [language_servers.ember.language_ids]
-# "HTML" = "html"
-# "Handlebars" = "glimmer"
-# "Glimmer" = "glimmer"
-# "JavaScript.Glimmer" = "glimmer_javascript"
-# "TypeScript.Glimmer" = "glimmer_typescript"
+[language_servers.ember.language_ids]
+"Glimmer" = "glimmer"
+"JavaScript.Glimmer" = "glimmer_javascript"
+"TypeScript.Glimmer" = "glimmer_typescript"
 
-# [language_servers.glint.language_ids]
-# "HTML" = "html"
-# "Handlebars" = "glimmer"
-# "Glimmer" = "glimmer"
-# "JavaScript.glimmer" = "glimmer_javascript"
-# "TypeScript.glimmer" = "glimmer_typescript"
-
-# Doesn't do anything!
-# [language_servers.vscode-html-language-server.language_ids]
-# "Handlebars" = "html"
-# "Glimmer" = "html"
-
-# [language_servers.emmet-language-server]
-# name = "Emmet Language Server"
-# language = "HTML"
-# languages = [
-#     "HTML",
-#     "PHP",
-#     "ERB",
-#     "JavaScript",
-#     "TSX",
-#     "CSS",
-#     "Handlebars",
-#     "Glimmer",
-# ]
+[language_servers.glint.language_ids]
+"Glimmer" = "glimmer"
+"JavaScript.Glimmer" = "glimmer_javascript"
+"TypeScript.Glimmer" = "glimmer_typescript"

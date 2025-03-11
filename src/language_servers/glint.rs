@@ -1,25 +1,24 @@
 use std::collections::HashMap;
-use std::{env, fs};
-use zed::settings::LspSettings;
+use std::fs;
 use zed_extension_api::{self as zed, Result};
 
 use zed::lsp::{Completion, CompletionKind};
 use zed::CodeLabelSpan;
 
-struct GlintExtension {
-    did_find_server: bool,
+pub struct GlintServer {
+    pub did_find_server: bool,
 }
 
 const SERVER_PATH: &str = "node_modules/@glint/core/bin/glint-language-server.js";
 
-impl GlintExtension {
-    fn server_exists(&self) -> bool {
+impl GlintServer {
+    pub fn server_exists(&self) -> bool {
         fs::metadata(SERVER_PATH).map_or(false, |stat| stat.is_file())
     }
 
-    fn server_script_path(&mut self, id: &zed::LanguageServerId) -> Result<String> {
+    pub fn server_script_path(&mut self, id: &zed::LanguageServerId) -> Result<String> {
         let node_dependencies: HashMap<&str, &str> =
-            [("@glint/core", "1.5.1")].iter().cloned().collect();
+            [("@glint/core", "1.5.2")].iter().cloned().collect();
 
         let server_exists = self.server_exists();
 
@@ -43,7 +42,6 @@ impl GlintExtension {
 
             if installed_version.as_ref().map(String::as_str) != Some(version_to_install.as_str()) {
                 zed::set_language_server_installation_status(
-                    // Could this be updated to update the status of which dependency is being installed
                     id,
                     &zed::LanguageServerInstallationStatus::Downloading,
                 );
@@ -55,66 +53,12 @@ impl GlintExtension {
         self.did_find_server = true;
         Ok(SERVER_PATH.to_string())
     }
-}
 
-impl zed::Extension for GlintExtension {
-    fn new() -> Self {
-        println!("NEW!");
-        Self {
-            did_find_server: false,
-        }
-    }
-
-    fn language_server_command(
-        &mut self,
-        language_server_id: &zed::LanguageServerId,
-        _worktree: &zed::Worktree,
-    ) -> Result<zed::Command> {
-        let server_path = self.server_script_path(language_server_id)?;
-        Ok(zed::Command {
-            command: zed::node_binary_path()?,
-            args: vec![
-                env::current_dir()
-                    .unwrap()
-                    .join(&server_path)
-                    .to_string_lossy()
-                    .to_string(),
-                "--stdio".to_string(),
-            ],
-            env: Default::default(),
-        })
-    }
-
-    fn language_server_initialization_options(
-        &mut self,
-        language_server_id: &zed_extension_api::LanguageServerId,
-        worktree: &zed_extension_api::Worktree,
-    ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
-        let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
-            .ok()
-            .and_then(|lsp_settings| lsp_settings.initialization_options.clone())
-            .unwrap_or_default();
-        Ok(Some(settings))
-    }
-
-    fn language_server_workspace_configuration(
-        &mut self,
-        language_server_id: &zed_extension_api::LanguageServerId,
-        worktree: &zed_extension_api::Worktree,
-    ) -> zed_extension_api::Result<Option<zed_extension_api::serde_json::Value>> {
-        let settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
-            .ok()
-            .and_then(|lsp_settings| lsp_settings.settings.clone())
-            .unwrap_or_default();
-        Ok(Some(settings))
-    }
-
-    fn label_for_completion(
+    pub fn label_for_completion(
         &self,
         _language_server_id: &zed::LanguageServerId,
         completion: Completion,
     ) -> Option<zed::CodeLabel> {
-        println!("Label for completion {:?}", completion.kind);
         let highlight_name = match completion.kind? {
             CompletionKind::Class | CompletionKind::Interface => "type",
             CompletionKind::Constructor => "type",
@@ -145,5 +89,3 @@ impl zed::Extension for GlintExtension {
         })
     }
 }
-
-zed::register_extension!(GlintExtension);

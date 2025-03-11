@@ -20,11 +20,10 @@ impl EmberServer {
     pub fn server_script_path(&mut self, id: &zed::LanguageServerId) -> Result<String> {
         let node_dependencies: HashMap<&str, &str> = [
             ("@ember-tooling/ember-language-server", "2.30.5"),
-            ("els-a11y-addon", "1.0.4"),
             // TODO: FIGURE OUT HOW TO REGISTER COMMANDS FOR EMBER FAST CLI
             ("ember-fast-cli", "1.3.1"),
             ("ember-cli", "*"),
-            // TODO: Revisit adding glint dependencies when the glint language server is implemented.
+            ("els-addon-glint", "0.6.4"),
         ]
         .iter()
         .cloned()
@@ -52,7 +51,6 @@ impl EmberServer {
 
             if installed_version.as_ref().map(String::as_str) != Some(version_to_install.as_str()) {
                 zed::set_language_server_installation_status(
-                    // Could this be updated to update the status of which dependency is being installed
                     id,
                     &zed::LanguageServerInstallationStatus::Downloading,
                 );
