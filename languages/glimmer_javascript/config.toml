@@ -1,6 +1,6 @@
-name = "Handlebars"
-grammar = "glimmer"
-path_suffixes = ["hbs"]
+name = "JavaScript.Glimmer"
+grammar = "glimmer_javascript"
+path_suffixes = ["gjs"]
 block_comment = ["{{!-- ", " --}}"]
 word_characters = []
 scope_opt_in_language_servers = [

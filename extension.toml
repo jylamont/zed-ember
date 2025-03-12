@@ -1,11 +1,48 @@
 id = "ember"
 name = "Ember"
-version = "0.0.1"
+version = "0.0.2"
 schema_version = 1
-authors = ["James Lamont <james@getvero.com>"]
+authors = ["James Lamont <james@getvero.com>", "Lou Greenwood"]
 description = "Syntax Highlighting for Ember"
 repository = "https://github.com/jylamont/zed-ember"
 
 [grammars.glimmer]
 repository = "https://github.com/ember-tooling/tree-sitter-glimmer"
-commit = "6b25d265c990139353e1f7f97baf84987ebb7bf0"
+commit = "da605af8c5999b43e6839b575eae5e6cafabb06f"
+
+[grammars.glimmer_javascript]
+repository = "https://github.com/NullVoxPopuli/tree-sitter-glimmer-javascript/"
+commit = "7e8ea8cf39fc360cb97bd253442cd48e4f7a9ce3"
+
+[grammars.glimmer_typescript]
+repository = "https://github.com/NullVoxPopuli/tree-sitter-glimmer-typescript/"
+commit = "4006128790efb58ca82a4492d8ef0983b260fc6a"
+
+[language_servers.ember]
+name = "Ember Language Server"
+languages = [
+    "Handlebars",
+    "JavaScript",
+    "TypeScript",
+    "JavaScript.Glimmer",
+    "TypeScript.Glimmer",
+]
+
+[language_servers.glint]
+name = "Glint"
+languages = [
+    "JavaScript",
+    "TypeScript",
+    "JavaScript.Glimmer",
+    "TypeScript.Glimmer",
+]
+
+[language_servers.ember.language_ids]
+"Glimmer" = "glimmer"
+"JavaScript.Glimmer" = "glimmer_javascript"
+"TypeScript.Glimmer" = "glimmer_typescript"
+
+[language_servers.glint.language_ids]
+"Glimmer" = "glimmer"
+"JavaScript.Glimmer" = "glimmer_javascript"
+"TypeScript.Glimmer" = "glimmer_typescript"
