@@ -1,0 +1,25 @@
+name = "Glimmer (JavaScript)"
+grammar = "glimmer_javascript"
+path_suffixes = ["gjs"]
+line_comments = ["// "]
+autoclose_before = ";:.,=}])>"
+brackets = [
+    { start = "{", end = "}", close = true, newline = true },
+    { start = "[", end = "]", close = true, newline = true },
+    { start = "(", end = ")", close = true, newline = true },
+    { start = "<", end = ">", close = false, newline = true, not_in = ["comment", "string"] },
+    { start = "\"", end = "\"", close = true, newline = false, not_in = ["comment", "string"] },
+    { start = "'", end = "'", close = true, newline = false, not_in = ["comment", "string"] },
+    { start = "`", end = "`", close = true, newline = false, not_in = ["comment", "string"] },
+    { start = "/*", end = " */", close = true, newline = false, not_in = ["comment", "string"] },
+]
+word_characters = ["$", "#"]
+prettier_plugins = ["prettier-plugin-ember-template-tag"]
+prettier_parser_name = "ember-template-tag"
+tab_size = 2
+
+[jsx_tag_auto_close]
+open_tag_node_name = "glimmer_opening_tag"
+close_tag_node_name = "glimmer_closing_tag"
+tag_name_node_name = "glimmer_template_tag_name"
+jsx_element_node_name = "glimmer_template"
