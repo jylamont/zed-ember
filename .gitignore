@@ -1,0 +1,12 @@
+#
+# zed-vue
+#
+
+*.wasm
+grammars/
+
+#
+# Rust
+#
+
+/target
