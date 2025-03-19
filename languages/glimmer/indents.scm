@@ -1,22 +1,28 @@
-[
-   (element_node (element_node_start))
-   (element_node_void)
-   (block_statement (block_statement_start))
-   (mustache_statement)
- ] @indent.begin
+; Angle bracket elements
+(element_node
+  (element_node_start) @start
+  (element_node_end)? @end) @indent
 
- (element_node (element_node_end  [">"] @indent.end))
- (element_node_void "/>" @indent.end)
- [
-  ">"
-  "/>"
-  "</"
-   "{{/"
-   "}}"
-  ] @indent.branch
+; Mustache blocks
+(block_statement
+  (block_statement_start) @start
+  (block_statement_end)? @end) @indent
 
- (mustache_statement
-   (helper_invocation helper: (identifier) @_identifier (#lua-match? @_identifier "else"))
-   ) @indent.branch
- (mustache_statement ((identifier) @_identifier (#lua-match? @_identifier "else"))) @indent.branch
- (comment_statement) @indent.ignore
+; Matches `else if` statements
+(block_statement
+	(mustache_statement
+		(helper_invocation
+			helper: (identifier) @_identifier (#match? @_identifier "else")
+			argument: (identifier) @_argIdentifier (#match? @_argIdentifier "if"))
+	) @start
+) @indent
+
+; Matches `else` statements
+(block_statement
+	(mustache_statement
+		(
+      (identifier) @_identifier
+      (#match? @_identifier "else")
+    )
+	) @start
+) @indent
