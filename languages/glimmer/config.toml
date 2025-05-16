@@ -1,3 +1,4 @@
 name = "Handlebars"
 grammar = "glimmer"
 path_suffixes = ["hbs"]
+block_comment = ["{{!-- ", " --}}"]
