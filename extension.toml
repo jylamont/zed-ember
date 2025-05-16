@@ -9,3 +9,11 @@ repository = "https://github.com/jylamont/zed-ember"
 [grammars.glimmer]
 repository = "https://github.com/ember-tooling/tree-sitter-glimmer"
 commit = "6b25d265c990139353e1f7f97baf84987ebb7bf0"
+
+[grammars.glimmer_typescript]
+repository = "https://github.com/NullVoxPopuli/tree-sitter-glimmer-typescript"
+commit = "48c60295f1ee34ea4ed6e5177102be6d24bfc9d0"
+
+[grammars.glimmer_javascript]
+repository = "https://github.com/NullVoxPopuli/tree-sitter-glimmer-javascript"
+commit = "babba3fc0c822a633261ce9e96a4d7986050eb0c"
