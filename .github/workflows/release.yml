@@ -1,0 +1,16 @@
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  homebrew:
+    name: Release Zed Extension
+    runs-on: ubuntu-latest
+    steps:
+      - uses: huacnlee/zed-extension-action@4e2e500ba7bcc8b4147b092e2f5a597fef267e70
+        with:
+          extension-name: ember
+          push-to: jylamont/extensions
+        env:
+          COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
