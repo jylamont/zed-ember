@@ -1,6 +1,6 @@
 name = "Handlebars"
 grammar = "glimmer"
-path_suffixes = ["hbs"]
+path_suffixes = ["hbs", "handlebars"]
 prettier_parser_name = "glimmer"
 block_comment = ["{{!-- ", " --}}"]
 brackets = [
